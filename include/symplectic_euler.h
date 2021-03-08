@@ -8,7 +8,13 @@
 //  q - set q to the updated generalized coordinate using Symplectic Euler time integration
 //  qdot - set qdot to the updated generalized velocity using Symplectic Euler time integration
 
-template<typename FORCE> 
-inline void symplectic_euler(Eigen::VectorXd &q, Eigen::VectorXd &qdot, double dt, double mass,  FORCE &force) {
+template <typename FORCE>
+inline void symplectic_euler(Eigen::VectorXd &q, Eigen::VectorXd &qdot, double dt, double mass, FORCE &force)
+{
+    Eigen::VectorXd f;
+    force(f, q, qdot);
 
+    qdot(0) = qdot(0) + dt * f(0) / mass;
+
+    q(0) = q(0) + dt * qdot(0);
 }

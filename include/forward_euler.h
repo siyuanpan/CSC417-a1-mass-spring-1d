@@ -1,3 +1,4 @@
+#pragma once
 #include <Eigen/Dense>
 
 //Input:
@@ -10,7 +11,13 @@
 //  q - set q to the updated generalized coordinate using Forward Euler time integration
 //  qdot - set qdot to the updated generalized velocity using Forward Euler time integration
 
-template<typename FORCE> 
-inline void forward_euler(Eigen::VectorXd &q, Eigen::VectorXd &qdot, double dt, double mass,  FORCE &force) {
+template <typename FORCE>
+inline void forward_euler(Eigen::VectorXd &q, Eigen::VectorXd &qdot, double dt, double mass, FORCE &force)
+{
+    Eigen::VectorXd f;
+    force(f, q, qdot);
 
+    q = q + qdot * dt;
+
+    qdot = qdot + f / mass * dt;
 }
